@@ -1,0 +1,29 @@
+name: Build Picons
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y git binutils pngquant imagemagick librsvg2-bin jq xz-utils
+
+      - name: Build servicelist and picons
+        run: |
+          chmod +x 1-build-servicelist.sh 2-build-picons.sh
+          ./1-build-servicelist.sh srp
+          ./2-build-picons.sh srp
+
+      - name: Upload Output
+        uses: actions/upload-artifact@v4
+        with:
+          name: generated-picons
+          path: build-output/binaries-*/*
