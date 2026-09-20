@@ -1,4 +1,4 @@
-name: Build My Custom Picons
+name: Build Light Transparent Picons
 
 on:
   workflow_dispatch:
@@ -6,6 +6,8 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
 
     steps:
       - name: Checkout code
@@ -20,12 +22,15 @@ jobs:
         run: |
           chmod +x 1-build-servicelist.sh 2-build-picons.sh
           
-          # السكربت سيقرأ ملفات القنوات من مجلد build-input تلقائياً
+          # بناء القائمة والبيكونات بناءً على الملفات والمقاس المحدد في backgrounds.conf
           ./1-build-servicelist.sh srp --name=mybox
           ./2-build-picons.sh srp --name=mybox
 
-      - name: Upload Output
-        uses: actions/upload-artifact@v4
+      - name: Release Picons
+        uses: softprops/action-gh-release@v2
         with:
-          name: my-custom-picons
-          path: build-output/binaries-*/*
+          tag_name: latest
+          name: "Picons 220x132 Light Transparent"
+          files: build-output/binaries-*/*.tar.*
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
