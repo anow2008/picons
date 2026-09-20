@@ -19,8 +19,12 @@ jobs:
       - name: Build servicelist and picons
         run: |
           chmod +x 1-build-servicelist.sh 2-build-picons.sh
-          ./1-build-servicelist.sh srp
-          ./2-build-picons.sh srp
+          
+          # بناء قائمة الخدمة بدون الانتظار التفاعلي (تم وضع أقمار شائعة مثل 7W و 13E و 19.2E)
+          ./1-build-servicelist.sh srp --name=mypicons --filter="7W,13E,19.2E"
+          
+          # بناء البيكونات بناءً على الاسم المحدد
+          ./2-build-picons.sh srp --name=mypicons
 
       - name: Upload Output
         uses: actions/upload-artifact@v4
