@@ -1,0 +1,11 @@
+#NAME music
+#SERVICE 1:0:1:1f61:12:6e:dca0000:0:0:0:
+#SERVICE 1:0:1:645:10:800:ffba0000:0:0:0:
+#SERVICE 1:0:1:fb6:1d:6e:dca0000:0:0:0:
+#SERVICE 1:0:1:8:9c7c:77e:dca0000:0:0:0:
+#SERVICE 1:0:1:1c86:49:800:dca0000:0:0:0:
+#SERVICE 1:0:19:713:12:800:dca0000:0:0:0:
+#SERVICE 1:0:1:ec:ffdc:77e:dca0000:0:0:0:
+#SERVICE 1:0:1:eb:ffdc:77e:dca0000:0:0:0:
+#SERVICE 1:0:1:7:8:ffff:dca2b58:0:0:0:
+#SERVICE 1:0:1:10:1:ffff:dca2a3f:0:0:0:
