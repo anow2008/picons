@@ -1,4 +1,4 @@
-name: Build Picons
+name: Build My Custom Picons
 
 on:
   workflow_dispatch:
@@ -20,14 +20,12 @@ jobs:
         run: |
           chmod +x 1-build-servicelist.sh 2-build-picons.sh
           
-          # بناء قائمة الخدمة بدون الانتظار التفاعلي (تم وضع أقمار شائعة مثل 7W و 13E و 19.2E)
-          ./1-build-servicelist.sh srp --name=mypicons --filter="7W,13E,19.2E"
-          
-          # بناء البيكونات بناءً على الاسم المحدد
-          ./2-build-picons.sh srp --name=mypicons
+          # السكربت سيقرأ ملفات القنوات من مجلد build-input تلقائياً
+          ./1-build-servicelist.sh srp --name=mybox
+          ./2-build-picons.sh srp --name=mybox
 
       - name: Upload Output
         uses: actions/upload-artifact@v4
         with:
-          name: generated-picons
+          name: my-custom-picons
           path: build-output/binaries-*/*
