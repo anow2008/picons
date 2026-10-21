@@ -1,0 +1,39 @@
+name: Clean and sort index files
+
+on:
+  workflow_dispatch:
+
+jobs:
+  clean-and-sort:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+
+      - name: Clean and sort srp.index
+        run: python resources/tools/clean-and-sort-srp-index.py
+
+      - name: Clean and sort utf8snp.index
+        run: python resources/tools/clean-and-sort-utf8snp-index.py
+
+      - name: Commit changes (if any)
+        run: |
+          git config user.name "GitHub Actions Bot"
+          git config user.email "actions@github.com"
+          if git diff --quiet; then
+            echo "No changes to commit."
+          else
+            git add build-source/srp.index build-source/utf8snp.index
+            git commit -m "Auto: clean and sort srp.index and utf8snp.index via GitHub Action"
+            git push --force
+          fi
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
