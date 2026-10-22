@@ -1,36 +1,25 @@
-name: Build Light Transparent Picons
-
-on:
-  workflow_dispatch:
-
-jobs:
-  build:
-    runs-on: ubuntu-latest
-    permissions:
-      contents: write
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Install dependencies
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y git binutils pngquant imagemagick librsvg2-bin jq xz-utils
-
-      - name: Build servicelist and picons
+- name: Build servicelist and picons
         run: |
           chmod +x 1-build-servicelist.sh 2-build-picons.sh
           
-          # بناء القائمة والبيكونات بناءً على الملفات والمقاس المحدد في backgrounds.conf
+          # بناء القائمة والبيكونات
           ./1-build-servicelist.sh srp --name=mybox
           ./2-build-picons.sh srp --name=mybox
 
-      - name: Release Picons
-        uses: softprops/action-gh-release@v3
-        with:
-          tag_name: latest
-          name: "Picons 220x132 Light Transparent"
-          files: build-output/binaries-*/*.tar.*
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # تحويل الروابط الرمزية إلى صور حقيقية حتى يمكن فكها على الويندوز
+          cd build-output
+          for dir in binaries-*/; do
+            if [ -d "$dir" ]; then
+              cd "$dir"
+              # فك الضغط وإعادة الضغط بدون symlinks
+              for tarfile in *.tar.xz; do
+                if [ -f "$tarfile" ]; then
+                  mkdir temp_extract
+                  tar -xf "$tarfile" -C temp_extract
+                  tar -h -cJf "$tarfile" -C temp_extract .
+                  rm -rf temp_extract
+                fi
+              done
+              cd ..
+            fi
+          done
